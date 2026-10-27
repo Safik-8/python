@@ -1,0 +1,51 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="eXommerce – Your one-stop shop for everything. Browse, add to cart, and shop with ease.">
+    <title>{% block title %}eXommerce{% endblock %}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+
+<header>
+    <a href="{% url 'home' %}" class="header-brand">⚡ eXommerce</a>
+    <nav>
+        <a href="{% url 'home' %}">🏠 Home</a>
+        <a href="{% url 'products' %}">🛍️ Products</a>
+        <a href="{% url 'blog:post_list' %}">📝 Blog</a>
+        <a href="{% url 'about' %}">💡 About</a>
+        <a href="{% url 'cart' %}">
+            🛒 Cart
+            {% comment %}Cart count placeholder - computed in template tag if needed{% endcomment %}
+        </a>
+        <a href="{% url 'product_create' %}" class="btn btn-primary btn-sm" style="margin-left:0.5rem;">+ Add Product</a>
+    </nav>
+</header>
+
+{% if messages %}
+<div class="messages-container">
+    {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}">
+            {% if message.tags == 'success' %}✅{% elif message.tags == 'error' %}❌{% elif message.tags == 'warning' %}⚠️{% else %}ℹ️{% endif %}
+            {{ message }}
+        </div>
+    {% endfor %}
+</div>
+{% endif %}
+
+<main>
+    {% block content %}{% endblock %}
+</main>
+
+<footer>
+    &copy; 2026 <strong>eXommerce</strong>. Built with ❤️ and Django.
+</footer>
+
+</body>
+</html>

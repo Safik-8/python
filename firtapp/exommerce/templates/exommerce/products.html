@@ -1,0 +1,60 @@
+{% extends 'exommerce/base.html' %}
+
+{% block title %}eXommerce – All Products{% endblock %}
+
+{% block content %}
+<div class="section-header">
+    <div class="page-header" style="margin-bottom:0;">
+        <h1>🛍️ All Products</h1>
+        <p>{{ products|length }} product{{ products|length|pluralize }} available</p>
+    </div>
+    <a href="{% url 'product_create' %}" class="btn btn-primary">+ Add Product</a>
+</div>
+
+{% if products %}
+<div class="product-grid">
+    {% for product in products %}
+    <div class="product-card">
+        <div class="product-card-img">
+            {% if product.image_url %}
+                <img src="{{ product.image_url }}" alt="{{ product.name }}">
+            {% else %}
+                📦
+            {% endif %}
+        </div>
+        <div class="product-card-body">
+            <h3>{{ product.name }}</h3>
+            <p>{{ product.description|default:"No description available." }}</p>
+            <div class="product-price">${{ product.price }}</div>
+            <div class="product-stock {% if product.stock == 0 %}out{% endif %}">
+                {% if product.stock > 0 %}
+                    <span class="badge badge-success">✅ {{ product.stock }} in stock</span>
+                {% else %}
+                    <span class="badge badge-danger">❌ Out of stock</span>
+                {% endif %}
+            </div>
+            <div class="product-actions" style="margin-top:0.75rem;">
+                <a href="{% url 'add_to_cart' product.id %}" class="btn btn-accent btn-sm
+                   {% if product.stock == 0 %}{% endif %}"
+                   {% if product.stock == 0 %}style="pointer-events:none;opacity:0.5;"{% endif %}>
+                    🛒 Add to Cart
+                </a>
+                <a href="{% url 'product_detail' product.id %}" class="btn btn-outline btn-sm">👁️ View</a>
+            </div>
+        </div>
+        <div class="product-crud-actions">
+            <a href="{% url 'product_update' product.id %}" class="btn btn-outline btn-sm">✏️ Edit</a>
+            <a href="{% url 'product_delete' product.id %}" class="btn btn-danger btn-sm">🗑️ Delete</a>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+<div class="empty-state">
+    <div class="icon">📦</div>
+    <h3>No products yet!</h3>
+    <p>Add your first product to get started.</p>
+    <a href="{% url 'product_create' %}" class="btn btn-primary" style="margin-top:1rem;">+ Add Product</a>
+</div>
+{% endif %}
+{% endblock %}

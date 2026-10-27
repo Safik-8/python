@@ -1,0 +1,50 @@
+{% extends 'exommerce/base.html' %}
+
+{% block title %}eXommerce – {{ action }} Product{% endblock %}
+
+{% block content %}
+<div class="form-card">
+    <h2>{% if action == 'Edit' %}✏️ Edit Product{% else %}➕ Add New Product{% endif %}</h2>
+
+    <form method="POST">
+        {% csrf_token %}
+
+        <div class="form-group">
+            <label for="name">Product Name *</label>
+            <input type="text" id="name" name="name" required placeholder="e.g. Wireless Headphones"
+                   value="{{ product.name|default:'' }}">
+        </div>
+        <div class="form-group">
+            <label for="description">Description</label>
+            <textarea id="description" name="description" placeholder="Describe the product...">{{ product.description|default:'' }}</textarea>
+        </div>
+
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem;">
+            <div class="form-group">
+                <label for="price">Price ($) *</label>
+                <input type="number" id="price" name="price" min="0" step="0.01" required
+                       placeholder="0.00" value="{{ product.price|default:'' }}">
+            </div>
+
+            <div class="form-group">
+                <label for="stock">Stock Quantity</label>
+                <input type="number" id="stock" name="stock" min="0" step="1"
+                       placeholder="0" value="{{ product.stock|default:'0' }}">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="image_url">Image URL (optional)</label>
+            <input type="url" id="image_url" name="image_url" placeholder="https://example.com/image.jpg"
+                   value="{{ product.image_url|default:'' }}">
+        </div>
+
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary">
+                {% if action == 'Edit' %}✔️ Save Changes{% else %}✅ Add Product{% endif %}
+            </button>
+            <a href="{% url 'products' %}" class="btn btn-outline">Cancel</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

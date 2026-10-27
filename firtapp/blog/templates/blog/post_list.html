@@ -1,0 +1,69 @@
+{% extends 'exommerce/base.html' %}
+
+{% block title %}Blog – eXommerce{% endblock %}
+
+{% block content %}
+<section class="blog-section">
+  <div class="blog-header">
+    <h1 class="page-title">📝 Blog</h1>
+    <a href="{% url 'blog:post_create' %}" class="btn btn-primary">+ New Post</a>
+  </div>
+
+  {% if posts %}
+    <div class="blog-grid">
+      {% for post in posts %}
+        <article class="blog-card {% if post.status == 'draft' %}draft{% endif %}">
+          {% if post.cover_url %}
+            <div class="blog-card-img">
+              <img src="{{ post.cover_url }}" alt="{{ post.title }}" loading="lazy">
+            </div>
+          {% else %}
+            <div class="blog-card-img blog-card-placeholder">
+              <span>📄</span>
+            </div>
+          {% endif %}
+
+          <div class="blog-card-body">
+            {% if post.status == 'draft' %}
+              <span class="badge badge-draft">Draft</span>
+            {% else %}
+              <span class="badge badge-published">Published</span>
+            {% endif %}
+
+            <h2 class="blog-card-title">
+              <a href="{% url 'blog:post_detail' post.pk %}">{{ post.title }}</a>
+            </h2>
+            <p class="blog-card-meta">✍️ {{ post.author }} &bull; {{ post.created_at|date:"M d, Y" }}</p>
+            <p class="blog-card-excerpt">{{ post.body|truncatewords:25 }}</p>
+
+            <div class="blog-card-actions">
+              <a href="{% url 'blog:post_detail' post.pk %}" class="btn btn-sm btn-outline">Read →</a>
+              <a href="{% url 'blog:post_update' post.pk %}" class="btn btn-sm btn-secondary">✏️ Edit</a>
+              <a href="{% url 'blog:post_delete' post.pk %}" class="btn btn-sm btn-danger">🗑️ Delete</a>
+            </div>
+          </div>
+        </article>
+      {% endfor %}
+    </div>
+
+    {# Pagination #}
+    {% if is_paginated %}
+      <div class="pagination">
+        {% if page_obj.has_previous %}
+          <a href="?page={{ page_obj.previous_page_number }}" class="btn btn-sm btn-outline">← Prev</a>
+        {% endif %}
+        <span class="page-info">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+        {% if page_obj.has_next %}
+          <a href="?page={{ page_obj.next_page_number }}" class="btn btn-sm btn-outline">Next →</a>
+        {% endif %}
+      </div>
+    {% endif %}
+
+  {% else %}
+    <div class="empty-state">
+      <p class="empty-icon">📭</p>
+      <p>No posts yet. <a href="{% url 'blog:post_create' %}">Create the first one!</a></p>
+    </div>
+  {% endif %}
+</section>
+{% endblock %}

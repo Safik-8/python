@@ -1,0 +1,76 @@
+{% extends 'exommerce/base.html' %}
+
+{% block title %}{{ action }} Post – Blog{% endblock %}
+
+{% block content %}
+<section class="form-section">
+  <div class="form-card">
+    <div class="form-card-header">
+      <h1>{% if action == 'Edit' %}✏️ Edit Post{% else %}📝 Create New Post{% endif %}</h1>
+      <p>{% if action == 'Edit' %}Update your blog post below.{% else %}Fill in the details to publish a new post.{% endif %}</p>
+    </div>
+
+    <form method="post" novalidate>
+      {% csrf_token %}
+
+      <div class="form-group">
+        <label for="id_title">Title <span class="required">*</span></label>
+        {{ form.title }}
+        {% if form.title.errors %}
+          <p class="field-error">{{ form.title.errors|join:", " }}</p>
+        {% endif %}
+      </div>
+
+      <div class="form-group">
+        <label for="id_slug">Slug <span class="required">*</span></label>
+        {{ form.slug }}
+        <small class="form-hint">URL-friendly identifier. E.g. <em>my-first-post</em></small>
+        {% if form.slug.errors %}
+          <p class="field-error">{{ form.slug.errors|join:", " }}</p>
+        {% endif %}
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="id_author">Author</label>
+          {{ form.author }}
+          {% if form.author.errors %}
+            <p class="field-error">{{ form.author.errors|join:", " }}</p>
+          {% endif %}
+        </div>
+
+        <div class="form-group">
+          <label for="id_status">Status</label>
+          {{ form.status }}
+          {% if form.status.errors %}
+            <p class="field-error">{{ form.status.errors|join:", " }}</p>
+          {% endif %}
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="id_cover_url">Cover Image URL</label>
+        {{ form.cover_url }}
+        {% if form.cover_url.errors %}
+          <p class="field-error">{{ form.cover_url.errors|join:", " }}</p>
+        {% endif %}
+      </div>
+
+      <div class="form-group">
+        <label for="id_body">Body <span class="required">*</span></label>
+        {{ form.body }}
+        {% if form.body.errors %}
+          <p class="field-error">{{ form.body.errors|join:", " }}</p>
+        {% endif %}
+      </div>
+
+      <div class="form-actions">
+        <a href="{% url 'blog:post_list' %}" class="btn btn-outline">Cancel</a>
+        <button type="submit" class="btn btn-primary">
+          {% if action == 'Edit' %}💾 Save Changes{% else %}🚀 Publish Post{% endif %}
+        </button>
+      </div>
+    </form>
+  </div>
+</section>
+{% endblock %}

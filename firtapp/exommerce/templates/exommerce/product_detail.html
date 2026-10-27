@@ -1,0 +1,46 @@
+{% extends 'exommerce/base.html' %}
+
+{% block title %}eXommerce – {{ product.name }}{% endblock %}
+
+{% block content %}
+<div style="margin-bottom:1.5rem;">
+    <a href="{% url 'products' %}" class="btn btn-outline btn-sm">← Back to Products</a>
+</div>
+
+<div class="product-detail">
+    <div class="product-detail-img">
+        {% if product.image_url %}
+            <img src="{{ product.image_url }}" alt="{{ product.name }}">
+        {% else %}
+            📦
+        {% endif %}
+    </div>
+
+    <div class="product-detail-info">
+        <h1>{{ product.name }}</h1>
+        <div class="price">${{ product.price }}</div>
+        <p class="description">{{ product.description|default:"No description available for this product." }}</p>
+
+        <div style="margin-bottom:1.5rem;">
+            {% if product.stock > 0 %}
+                <span class="badge badge-success">✅ {{ product.stock }} in stock</span>
+            {% else %}
+                <span class="badge badge-danger">❌ Out of stock</span>
+            {% endif %}
+        </div>
+
+        <div style="display:flex; gap:0.75rem; flex-wrap:wrap; margin-bottom:2rem;">
+            {% if product.stock > 0 %}
+                <a href="{% url 'add_to_cart' product.id %}" class="btn btn-accent btn-lg">🛒 Add to Cart</a>
+            {% else %}
+                <button class="btn btn-accent btn-lg" disabled style="opacity:0.5;cursor:not-allowed;">🛒 Out of Stock</button>
+            {% endif %}
+        </div>
+
+        <div style="display:flex; gap:0.5rem; padding-top:1rem; border-top:1px solid var(--dark-border);">
+            <a href="{% url 'product_update' product.id %}" class="btn btn-outline btn-sm">✏️ Edit Product</a>
+            <a href="{% url 'product_delete' product.id %}" class="btn btn-danger btn-sm">🗑️ Delete Product</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

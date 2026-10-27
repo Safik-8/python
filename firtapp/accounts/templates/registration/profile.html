@@ -1,0 +1,14 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><title>Profile</title></head>
+<body>
+  <h1>Profile</h1>
+  <p>Signed in as {{ request.user.username }}.</p>
+  <p>{{ request.user.email }}</p>
+  <p><a href="{% url 'accounts:password_change' %}">Change password</a></p>
+  <form method="post" action="{% url 'accounts:logout' %}">
+    {% csrf_token %}
+    <button type="submit">Logout</button>
+  </form>
+</body>
+</html>

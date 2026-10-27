@@ -1,0 +1,19 @@
+{% extends 'exommerce/base.html' %}
+
+{% block title %}eXommerce – Delete {{ product.name }}{% endblock %}
+
+{% block content %}
+<div class="confirm-card">
+    <div class="icon">🗑️</div>
+    <h2>Delete Product?</h2>
+    <p>Are you sure you want to permanently delete <strong>"{{ product.name }}"</strong>? This action cannot be undone.</p>
+
+    <div style="display:flex; gap:0.75rem; justify-content:center;">
+        <form method="POST">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger">🗑️ Yes, Delete</button>
+        </form>
+        <a href="{% url 'products' %}" class="btn btn-outline">Cancel</a>
+    </div>
+</div>
+{% endblock %}

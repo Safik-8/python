@@ -1,0 +1,38 @@
+{% extends 'exommerce/base.html' %}
+
+{% block title %}{{ post.title }} – Blog{% endblock %}
+
+{% block content %}
+<article class="post-detail">
+
+  {% if post.cover_url %}
+    <div class="post-hero">
+      <img src="{{ post.cover_url }}" alt="{{ post.title }}">
+    </div>
+  {% endif %}
+
+  <div class="post-detail-body">
+
+    <div class="post-meta-bar">
+      {% if post.status == 'draft' %}
+        <span class="badge badge-draft">Draft</span>
+      {% else %}
+        <span class="badge badge-published">Published</span>
+      {% endif %}
+      <span class="post-meta-info">✍️ {{ post.author }} &bull; {{ post.created_at|date:"F d, Y" }}</span>
+    </div>
+
+    <h1 class="post-title">{{ post.title }}</h1>
+    <div class="post-body">
+      {{ post.body|linebreaks }}
+    </div>
+
+    <div class="post-actions">
+      <a href="{% url 'blog:post_list' %}" class="btn btn-outline">← Back to Blog</a>
+      <a href="{% url 'blog:post_update' post.pk %}" class="btn btn-secondary">✏️ Edit Post</a>
+      <a href="{% url 'blog:post_delete' post.pk %}" class="btn btn-danger">🗑️ Delete Post</a>
+    </div>
+
+  </div>
+</article>
+{% endblock %}
